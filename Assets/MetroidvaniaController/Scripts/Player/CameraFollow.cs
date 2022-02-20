@@ -7,6 +7,8 @@ public class CameraFollow : MonoBehaviour
     public float FollowSpeed = 2f;
     public Transform Target;
 
+    public BoxCollider2D TargetRoomBounds;
+
     // Transform of the camera to shake. Grabs the gameObject's transform
     // if null.
     private Transform camTransform;
@@ -17,7 +19,6 @@ public class CameraFollow : MonoBehaviour
     // Amplitude of the shake. A larger value shakes the camera harder.
     public float shakeAmount = 0.1f;
     public float decreaseFactor = 1.0f;
-    public float verticalOffset = 3;
 
     Vector3 originalPos;
 
@@ -37,10 +38,7 @@ public class CameraFollow : MonoBehaviour
 
     private void Update()
     {
-        Vector3 newPosition = Target.position;
-        newPosition.z = -10;
-        newPosition.y += verticalOffset;
-        transform.position = Vector3.Slerp(transform.position, newPosition, FollowSpeed * Time.deltaTime);
+        SetCameraPosition();
 
         if (shakeDuration > 0)
         {
@@ -48,6 +46,37 @@ public class CameraFollow : MonoBehaviour
 
             shakeDuration -= Time.deltaTime * decreaseFactor;
         }
+    }
+
+    private void SetCameraPosition() {
+        Vector3 targetPosition = Target.position;
+        targetPosition.z = -10;
+        Vector3 newPosition = Vector3.Slerp(transform.position, targetPosition, FollowSpeed * Time.deltaTime);
+        float cameraHalfHeight = Camera.main.orthographicSize;
+        float cameraHalfWidth = Camera.main.aspect * cameraHalfHeight;
+
+        float cameraHorizontalMin = 0;
+        float cameraHorizontalMax =  cameraHalfWidth * 2;
+        float cameraVerticalMin = 0;
+        float cameraVerticalMax = cameraHalfHeight * 2;
+
+        float boundHalfHeight = TargetRoomBounds.bounds.extents.y;
+        float boundHalfWidth =  TargetRoomBounds.bounds.extents.x;
+
+        float boundHorizontalMin = -boundHalfWidth;
+        float boundHorizontalMax =  boundHalfWidth;
+        float boundVerticalMin = -boundHalfHeight;
+        float boundVerticalMax = boundHalfHeight; 
+
+        if(newPosition.x + cameraHorizontalMax > TargetRoomBounds.transform.position.x + boundHorizontalMax) {
+            newPosition.x = TargetRoomBounds.transform.position.x + boundHorizontalMax - cameraHorizontalMax;
+        }
+        if(newPosition.x + cameraHorizontalMin < TargetRoomBounds.transform.position.x + boundHorizontalMin) {
+            newPosition.x = TargetRoomBounds.transform.position.x + boundHorizontalMin - cameraHorizontalMin;
+        }
+
+        transform.position = newPosition;
+        //if(newPosition.y + Camera.main.orthographicSize.)
     }
 
     public void ShakeCamera()

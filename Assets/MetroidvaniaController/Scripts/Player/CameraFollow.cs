@@ -9,6 +9,9 @@ public class CameraFollow : MonoBehaviour
 
     public BoxCollider2D TargetRoomBounds;
 
+    public bool LockHorizontal;
+    public bool LockVertical;
+
     // Transform of the camera to shake. Grabs the gameObject's transform
     // if null.
     private Transform camTransform;
@@ -55,16 +58,16 @@ public class CameraFollow : MonoBehaviour
         float cameraHalfHeight = Camera.main.orthographicSize;
         float cameraHalfWidth = Camera.main.aspect * cameraHalfHeight;
 
-        float cameraHorizontalMin = 0;
-        float cameraHorizontalMax =  cameraHalfWidth * 2;
-        float cameraVerticalMin = 0;
-        float cameraVerticalMax = cameraHalfHeight * 2;
+        float cameraHorizontalMin = -cameraHalfWidth;
+        float cameraHorizontalMax =  cameraHalfWidth;
+        float cameraVerticalMin = -cameraHalfHeight;
+        float cameraVerticalMax = cameraHalfHeight;
 
         float boundHalfHeight = TargetRoomBounds.bounds.extents.y;
         float boundHalfWidth =  TargetRoomBounds.bounds.extents.x;
 
         float boundHorizontalMin = -boundHalfWidth;
-        float boundHorizontalMax =  boundHalfWidth;
+        float boundHorizontalMax = boundHalfWidth;
         float boundVerticalMin = -boundHalfHeight;
         float boundVerticalMax = boundHalfHeight; 
 
@@ -73,6 +76,14 @@ public class CameraFollow : MonoBehaviour
         }
         if(newPosition.x + cameraHorizontalMin < TargetRoomBounds.transform.position.x + boundHorizontalMin) {
             newPosition.x = TargetRoomBounds.transform.position.x + boundHorizontalMin - cameraHorizontalMin;
+        }
+
+        if(newPosition.y + cameraVerticalMax > TargetRoomBounds.transform.position.y + boundVerticalMax) {
+            newPosition.y = TargetRoomBounds.transform.position.y + boundVerticalMax - cameraVerticalMax;
+        }
+
+        if(newPosition.y + cameraVerticalMin < TargetRoomBounds.transform.position.y + boundVerticalMin) {
+            newPosition.y = TargetRoomBounds.transform.position.y + boundVerticalMin - cameraVerticalMin;
         }
 
         transform.position = newPosition;

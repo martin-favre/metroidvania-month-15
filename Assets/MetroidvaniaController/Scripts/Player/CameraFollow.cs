@@ -22,6 +22,8 @@ public class CameraFollow : MonoBehaviour
     // Amplitude of the shake. A larger value shakes the camera harder.
     public float shakeAmount = 0.1f;
     public float decreaseFactor = 1.0f;
+    public bool verticalMovementAllowed = true;
+    public bool horizontalMovementAllowed = true;
 
     Vector3 originalPos;
 
@@ -51,7 +53,8 @@ public class CameraFollow : MonoBehaviour
         }
     }
 
-    private void SetCameraPosition() {
+    private void SetCameraPosition()
+    {
         Vector3 targetPosition = Target.position;
         targetPosition.z = -10;
         Vector3 newPosition = Vector3.Slerp(transform.position, targetPosition, FollowSpeed * Time.deltaTime);
@@ -59,32 +62,51 @@ public class CameraFollow : MonoBehaviour
         float cameraHalfWidth = Camera.main.aspect * cameraHalfHeight;
 
         float cameraHorizontalMin = -cameraHalfWidth;
-        float cameraHorizontalMax =  cameraHalfWidth;
+        float cameraHorizontalMax = cameraHalfWidth;
         float cameraVerticalMin = -cameraHalfHeight;
         float cameraVerticalMax = cameraHalfHeight;
 
         float boundHalfHeight = TargetRoomBounds.bounds.extents.y;
-        float boundHalfWidth =  TargetRoomBounds.bounds.extents.x;
+        float boundHalfWidth = TargetRoomBounds.bounds.extents.x;
 
         float boundHorizontalMin = -boundHalfWidth;
         float boundHorizontalMax = boundHalfWidth;
         float boundVerticalMin = -boundHalfHeight;
-        float boundVerticalMax = boundHalfHeight; 
+        float boundVerticalMax = boundHalfHeight;
 
-        if(newPosition.x + cameraHorizontalMax > TargetRoomBounds.transform.position.x + boundHorizontalMax) {
-            newPosition.x = TargetRoomBounds.transform.position.x + boundHorizontalMax - cameraHorizontalMax;
+        if (horizontalMovementAllowed)
+        {
+            if (newPosition.x + cameraHorizontalMax > TargetRoomBounds.transform.position.x + boundHorizontalMax)
+            {
+                newPosition.x = TargetRoomBounds.transform.position.x + boundHorizontalMax - cameraHorizontalMax;
+            }
+            if (newPosition.x + cameraHorizontalMin < TargetRoomBounds.transform.position.x + boundHorizontalMin)
+            {
+                newPosition.x = TargetRoomBounds.transform.position.x + boundHorizontalMin - cameraHorizontalMin;
+            }
         }
-        if(newPosition.x + cameraHorizontalMin < TargetRoomBounds.transform.position.x + boundHorizontalMin) {
-            newPosition.x = TargetRoomBounds.transform.position.x + boundHorizontalMin - cameraHorizontalMin;
+        else
+        {
+            newPosition.x = transform.position.x;
         }
 
-        if(newPosition.y + cameraVerticalMax > TargetRoomBounds.transform.position.y + boundVerticalMax) {
-            newPosition.y = TargetRoomBounds.transform.position.y + boundVerticalMax - cameraVerticalMax;
+        if (verticalMovementAllowed)
+        {
+            if (newPosition.y + cameraVerticalMax > TargetRoomBounds.transform.position.y + boundVerticalMax)
+            {
+                newPosition.y = TargetRoomBounds.transform.position.y + boundVerticalMax - cameraVerticalMax;
+            }
+
+            if (newPosition.y + cameraVerticalMin < TargetRoomBounds.transform.position.y + boundVerticalMin)
+            {
+                newPosition.y = TargetRoomBounds.transform.position.y + boundVerticalMin - cameraVerticalMin;
+            }
+        }
+        else
+        {
+            newPosition.y = transform.position.y;
         }
 
-        if(newPosition.y + cameraVerticalMin < TargetRoomBounds.transform.position.y + boundVerticalMin) {
-            newPosition.y = TargetRoomBounds.transform.position.y + boundVerticalMin - cameraVerticalMin;
-        }
 
         transform.position = newPosition;
         //if(newPosition.y + Camera.main.orthographicSize.)

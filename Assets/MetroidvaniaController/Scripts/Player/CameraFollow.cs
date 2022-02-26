@@ -65,51 +65,51 @@ public class CameraFollow : MonoBehaviour
         float cameraHorizontalMax = cameraHalfWidth;
         float cameraVerticalMin = -cameraHalfHeight;
         float cameraVerticalMax = cameraHalfHeight;
-
-        float boundHalfHeight = TargetRoomBounds.bounds.extents.y;
-        float boundHalfWidth = TargetRoomBounds.bounds.extents.x;
-
-        float boundHorizontalMin = -boundHalfWidth;
-        float boundHorizontalMax = boundHalfWidth;
-        float boundVerticalMin = -boundHalfHeight;
-        float boundVerticalMax = boundHalfHeight;
-
-        if (horizontalMovementAllowed)
+        if (TargetRoomBounds != null)
         {
-            if (newPosition.x + cameraHorizontalMax > TargetRoomBounds.transform.position.x + boundHorizontalMax)
+            float boundHalfHeight = TargetRoomBounds.bounds.extents.y;
+            float boundHalfWidth = TargetRoomBounds.bounds.extents.x;
+
+            float boundHorizontalMin = -boundHalfWidth;
+            float boundHorizontalMax = boundHalfWidth;
+            float boundVerticalMin = -boundHalfHeight;
+            float boundVerticalMax = boundHalfHeight;
+
+            if (horizontalMovementAllowed)
             {
-                newPosition.x = TargetRoomBounds.transform.position.x + boundHorizontalMax - cameraHorizontalMax;
+                if (newPosition.x + cameraHorizontalMax > TargetRoomBounds.transform.position.x + boundHorizontalMax)
+                {
+                    newPosition.x = TargetRoomBounds.transform.position.x + boundHorizontalMax - cameraHorizontalMax;
+                }
+                if (newPosition.x + cameraHorizontalMin < TargetRoomBounds.transform.position.x + boundHorizontalMin)
+                {
+                    newPosition.x = TargetRoomBounds.transform.position.x + boundHorizontalMin - cameraHorizontalMin;
+                }
             }
-            if (newPosition.x + cameraHorizontalMin < TargetRoomBounds.transform.position.x + boundHorizontalMin)
+            else
             {
-                newPosition.x = TargetRoomBounds.transform.position.x + boundHorizontalMin - cameraHorizontalMin;
-            }
-        }
-        else
-        {
-            newPosition.x = transform.position.x;
-        }
-
-        if (verticalMovementAllowed)
-        {
-            if (newPosition.y + cameraVerticalMax > TargetRoomBounds.transform.position.y + boundVerticalMax)
-            {
-                newPosition.y = TargetRoomBounds.transform.position.y + boundVerticalMax - cameraVerticalMax;
+                newPosition.x = transform.position.x;
             }
 
-            if (newPosition.y + cameraVerticalMin < TargetRoomBounds.transform.position.y + boundVerticalMin)
+            if (verticalMovementAllowed)
             {
-                newPosition.y = TargetRoomBounds.transform.position.y + boundVerticalMin - cameraVerticalMin;
+                if (newPosition.y + cameraVerticalMax > TargetRoomBounds.transform.position.y + boundVerticalMax)
+                {
+                    newPosition.y = TargetRoomBounds.transform.position.y + boundVerticalMax - cameraVerticalMax;
+                }
+
+                if (newPosition.y + cameraVerticalMin < TargetRoomBounds.transform.position.y + boundVerticalMin)
+                {
+                    newPosition.y = TargetRoomBounds.transform.position.y + boundVerticalMin - cameraVerticalMin;
+                }
+            }
+            else
+            {
+                newPosition.y = transform.position.y;
             }
         }
-        else
-        {
-            newPosition.y = transform.position.y;
-        }
-
 
         transform.position = newPosition;
-        //if(newPosition.y + Camera.main.orthographicSize.)
     }
 
     public void ShakeCamera()

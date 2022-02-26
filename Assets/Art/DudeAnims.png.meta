@@ -54,6 +54,7 @@ TextureImporter:
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -352,6 +353,17 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      DudeAnims_6: 1283661009666664240
+      DudeAnims_3: 934894201643201522
+      DudeAnims_1: 3879279098048730642
+      DudeAnims_2: -7132585671589392919
+      DudeAnims_9: -7192682993523593954
+      DudeAnims_8: 6413718199035938862
+      DudeAnims_5: -7267448741274847064
+      DudeAnims_0: 4133281385378635308
+      DudeAnims_4: -5306127143066959953
+      DudeAnims_7: 7661451353715294057
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
